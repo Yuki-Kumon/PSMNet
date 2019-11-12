@@ -1,0 +1,20 @@
+name: pytorch
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python==3.7.4
+  - opencv
+  - matplotlib
+  - pytorch=1.2.0
+  - torchvision=0.4.0
+  # - cudatoolkit=10.0
+  - absl-py=0.7.1
+  - scikit-learn  # kNN required
+  - tqdm
+  - pyyaml
+  - pip
+  - pip:
+    - tensorboardx==1.6
+    - torchsummary
+    - japanize-matplotlib
