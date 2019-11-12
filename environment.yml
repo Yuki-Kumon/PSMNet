@@ -8,7 +8,7 @@ dependencies:
   - matplotlib
   - pytorch=1.2.0
   - torchvision=0.4.0
-  # - cudatoolkit=10.0
+  - cudatoolkit=10.0
   - absl-py=0.7.1
   - scikit-learn  # kNN required
   - tqdm
