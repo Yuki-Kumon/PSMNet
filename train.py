@@ -75,7 +75,6 @@ def main(_argv):
         psmnet = psmnet.to('cuda')
         criterion = criterion.to('cuda')
         logging.info('use cuda')
-        psmnet = nn.DataParallel(psmnet)
     else:
         logging.info('NOT use cuda')
 
