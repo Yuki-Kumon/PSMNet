@@ -29,9 +29,9 @@ edit_root = config.fields()['path']['edit']
 
 # make folders
 util = File_util()
-util.create_folder(os.path.join(original_root, 'band3s'))
-util.create_folder(os.path.join(original_root, 'band3bs'))
-util.create_folder(os.path.join(original_root, 'depth'))
+util.create_folder(os.path.join(edit_root, 'band3s'))
+util.create_folder(os.path.join(edit_root, 'band3bs'))
+util.create_folder(os.path.join(edit_root, 'depth'))
 
 # load image size
 original_size = config.fields()['size']['original']
