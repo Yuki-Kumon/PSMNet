@@ -37,8 +37,8 @@ class visualize_util():
         # もし、画像の書き出し用の変換がまだならここで行う
         if transform:
             image_list = self.image_trans(image_list)
-            annot_list = self.annot_trans(annot_list)
-            preds_list = self.annot_trans(preds_list)
+            # annot_list = self.annot_trans(annot_list)
+            # preds_list = self.annot_trans(preds_list)
 
         # 書き出し
         for i in range(len(image_list)):
