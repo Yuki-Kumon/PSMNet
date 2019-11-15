@@ -63,7 +63,8 @@ class CNN(nn.Module):
         super().__init__()
 
         self.conv0 = nn.Sequential(
-                Conv2dBn(in_channels=3, out_channels=32, kernel_size=3, stride=2, padding=1, use_relu=True),  # downsample
+                # Conv2dBn(in_channels=3, out_channels=32, kernel_size=3, stride=2, padding=1, use_relu=True),  # downsample
+                Conv2dBn(in_channels=1, out_channels=32, kernel_size=3, stride=2, padding=1, use_relu=True),  # モノクロ画像版
                 Conv2dBn(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, use_relu=True),
                 Conv2dBn(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, use_relu=True)
             )
