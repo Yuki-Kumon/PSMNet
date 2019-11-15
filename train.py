@@ -41,7 +41,7 @@ flags.DEFINE_string('tensor_board_log_dir', './tensorboard_log', 'tensorboardX l
 flags.DEFINE_string('config_path', './configs/configs.yml', 'config file path')
 flags.DEFINE_string('csv_path', './dataset/edit/result.csv', 'csv path for dataloader')
 flags.DEFINE_string('save_path', './model.tar', 'model save path')
-flags.DEFINE_integer('maxdisp', 120, 'max disparity')
+flags.DEFINE_integer('maxdisp', 192, 'max disparity')
 
 
 def main(_argv):
