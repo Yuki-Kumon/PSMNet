@@ -125,7 +125,7 @@ def train(max_epoch, epoch, batch, loader, model, optimizer, criterion, writer, 
 
             left_img = data['left']
             right_img = data['right']
-            target_disp = data['disp'][:, None]
+            target_disp = data['disp']
 
             mask = (target_disp > 0)
             mask = mask.detach_()
@@ -136,6 +136,7 @@ def train(max_epoch, epoch, batch, loader, model, optimizer, criterion, writer, 
 
             disp1, disp2, disp3 = model(left_img, right_img)
             print(disp1.to('cpu').size())
+            print(target_disp.size())
             loss1, loss2, loss3 = criterion(disp1[mask], disp2[mask], disp3[mask], target_disp[mask])
             total_loss = 0.5 * loss1 + 0.7 * loss2 + 1.0 * loss3
 
@@ -173,7 +174,7 @@ def test(batch, loader, model, optimizer, criterion, is_cuda):
 
             left_img = data['left']
             right_img = data['right']
-            target_disp = data['disp'][:, None]
+            target_disp = data['disp']
 
             mask = (target_disp > 0)
             mask = mask.detach_()
