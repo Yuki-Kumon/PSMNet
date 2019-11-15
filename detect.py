@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Train
+Detect
 Author :
     Yuki Kumon
 Last Update :
@@ -37,7 +37,7 @@ flags.DEFINE_bool('pre_trained', False, 'whether model is pretrained or not')
 flags.DEFINE_string('optimizer', 'Adam', 'select optimizer')
 flags.DEFINE_string('criterion', 'SmoothL1Loss', 'select criterion')
 flags.DEFINE_float('validation_rate', 0.1, 'validation number rate when spliting dataset')
-flags.DEFINE_string('tensor_board_log_dir', './tensorboard_log', 'tensorboardX logging folder')
+# flags.DEFINE_string('tensor_board_log_dir', './tensorboard_log', 'tensorboardX logging folder')
 flags.DEFINE_string('config_path', './configs/configs.yml', 'config file path')
 flags.DEFINE_string('csv_path', './dataset/edit/result.csv', 'csv path for dataloader')
 flags.DEFINE_string('save_path', './model.tar', 'model save path')
@@ -45,11 +45,6 @@ flags.DEFINE_integer('maxdisp', 192, 'max disparity')
 
 
 def main(_argv):
-
-    TENSOR_BOARD_LOG_DIR = FLAGS.tensor_board_log_dir
-    writer = SummaryWriter(TENSOR_BOARD_LOG_DIR)
-    logging.info('set tensorboardX writer')
-
     # load model
     psmnet = PSMNet(FLAGS.maxdisp)
 
@@ -88,7 +83,7 @@ def main(_argv):
     )
 
     # load checkpoint
-    if FLAGS.pre_trained:
+    if 1:
         psmnet, optimizer, epoch_old = File.load_checkpoint(FLAGS.save_path, psmnet, optimizer)
         logging.info('load checkpoint')
     else:
