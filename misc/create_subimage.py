@@ -43,7 +43,7 @@ length = [int(np.floor((original_size[i] - trimed_size[i]) / stride[i])) for i i
 
 
 # trim and save
-def trim(img, target_root, img_name, ext='.tif'):
+def trimer(img, target_root, img_name, ext='.tif'):
     # load original images and annotations
     img_sub = []
     name_list = []
@@ -69,9 +69,11 @@ band3s_img = cv2.imread(os.path.join(original_root, 'band3s.tif'), cv2.IMREAD_GR
 band3bs_img = cv2.imread(os.path.join(original_root, 'band3bs.tif'), cv2.IMREAD_GRAYSCALE)[9:-9, 9:-9]
 depth_img = np.load(os.path.join(original_root, 'img_dis.npy'))[0, 9:-9, 9:-9]
 
-band3s_list = trim(band3s_img, os.path.join(edit_root, 'band3s'), 'band3s.tif')
-band3bs_list = trim(band3bs_img, os.path.join(original_root, 'band3bs'), 'band3bs.tif')
-depth_list = trim(depth_img, os.path.join(original_root, 'depth'), 'depth.png', ext='.png')
-
+band3s_list = trimer(band3s_img, os.path.join(edit_root, 'band3s'), 'band3s.tif')
+print(band3s_list)
+band3bs_list = trimer(band3bs_img, os.path.join(original_root, 'band3bs'), 'band3bs.tif')
+print(band3bs_list)
+depth_list = trimer(depth_img, os.path.join(original_root, 'depth'), 'depth.png', ext='.png')
+print(depth_list)
 
 # write csv
