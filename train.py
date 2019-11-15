@@ -135,7 +135,9 @@ def train(max_epoch, epoch, batch, loader, model, optimizer, criterion, writer, 
                 right_img = right_img.to('cuda')
 
             disp1, disp2, disp3 = model(left_img, right_img)
-            loss1, loss2, loss3 = criterion(disp1[mask], disp2[mask], disp3[mask], target_disp[mask])
+            loss1 = criterion(disp1[mask], target_disp[mask])
+            loss2 = criterion(disp2[mask], target_disp[mask])
+            loss3 = criterion(disp3[mask], target_disp[mask])
             total_loss = 0.5 * loss1 + 0.7 * loss2 + 1.0 * loss3
 
             if is_cuda:
@@ -182,7 +184,9 @@ def test(batch, loader, model, optimizer, criterion, is_cuda):
                 right_img = right_img.to('cuda')
 
             disp1, disp2, disp3 = model(left_img, right_img)
-            loss1, loss2, loss3 = criterion(disp1[mask], disp2[mask], disp3[mask], target_disp[mask])
+            loss1 = criterion(disp1[mask], target_disp[mask])
+            loss2 = criterion(disp2[mask], target_disp[mask])
+            loss3 = criterion(disp3[mask], target_disp[mask])
             total_loss = 0.5 * loss1 + 0.7 * loss2 + 1.0 * loss3
 
             if is_cuda:
