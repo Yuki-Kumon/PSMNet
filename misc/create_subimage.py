@@ -16,6 +16,8 @@ from misc.dependences.File_util import File_util
 
 import yaml
 import os
+import csv
+
 import numpy as np
 import cv2
 
@@ -77,3 +79,7 @@ depth_list = trimer(depth_img, os.path.join(edit_root, 'depth'), 'depth.png', ex
 print(depth_list)
 
 # write csv
+with open(os.path.join(edit_root, 'result.csv'), 'w') as f:
+    writer = csv.writer(f)
+    for i in range(len(band3s_list)):
+        writer.writerow([band3s_list[i], band3bs_list[i], depth_list[i]])
