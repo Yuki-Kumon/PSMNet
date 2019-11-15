@@ -83,7 +83,8 @@ def main(_argv):
         FLAGS.csv_path,
         val_rate=FLAGS.validation_rate,
         image_size=[256, 256],
-        split=False
+        split=False,
+        batch_size=FLAGS.batch_size
     )
 
     # load checkpoint

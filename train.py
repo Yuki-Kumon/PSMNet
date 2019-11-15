@@ -84,7 +84,8 @@ def main(_argv):
     train_loader, val_loader = AsterLoader(
         FLAGS.csv_path,
         val_rate=FLAGS.validation_rate,
-        image_size=[256, 256]
+        image_size=[256, 256],
+        batch_size=FLAGS.batch_size
     )
 
     # load checkpoint
