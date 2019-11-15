@@ -27,7 +27,7 @@ class AsterDataset(Dataset):
     Datasetクラスを継承
     '''
 
-    def __init__(self, csv_path, trans1=None, trans2=None, trans3=None, random=False):
+    def __init__(self, csv_path, trans1=None, trans2=None, trans3=None):
         self.trans1 = trans1
         self.trans2 = trans2
         self.trans3 = trans3
@@ -163,3 +163,20 @@ def set_trans(image_size):
         Rotate_Segmentation()
     ])
     return trans1, trans2, trans3
+
+
+def AsterLoader(csv_path, batch_size=4, split=True, val_rate=0.1, shuffle=True):
+    trans1, trans2, trans3 = set_trans()
+    dataset = AsterDataset(csv_path, trans1, trans2, trans3)
+    if split:
+        # split dataset randomly
+        n_sample = len(dataset)
+        val_size = int(n_sample * val_rate)
+        train_size = n_sample - val_size
+        train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size])
+        return (
+            torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle),
+            torch.utils.data.DataLoader(val_dataset, batch_size=batch_size, shuffle=shuffle)
+        )
+    else:
+        return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
