@@ -13,3 +13,4 @@ result/
 
 # my own ignores
 dataset
+.tar
