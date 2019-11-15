@@ -39,7 +39,7 @@ trimed_size = config.fields()['size']['trim']
 stride = config.fields()['size']['stride']
 
 stride = [int(x) for x in stride]
-len = [int(np.floor((original_size[i] - trimed_size[i]) / stride[i])) for i in range(2)]
+length = [int(np.floor((original_size[i] - trimed_size[i]) / stride[i])) for i in range(2)]
 
 
 # trim and save
@@ -48,8 +48,8 @@ def trim(img, target_root, img_name, ext='.tif'):
     img_sub = []
     name_list = []
 
-    for j in range(len[1]):
-        for i in range(len[0]):
+    for j in range(length[1]):
+        for i in range(length[0]):
             img_sub.append(img[
                 stride[0] * i:stride[0] * i + trimed_size[0],
                 stride[1] * j:stride[1] * j + trimed_size[1]
