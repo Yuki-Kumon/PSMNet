@@ -26,7 +26,7 @@ from absl.flags import FLAGS
 
 from models.PSMnet import PSMNet
 from dataloader.AsterLoader import AsterLoader
-from misc.File_util import File_util
+from misc.dependences.File_util import File_util
 
 
 flags.DEFINE_integer('epoch', 50, 'epoch number')
