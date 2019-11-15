@@ -99,6 +99,8 @@ def main(_argv):
     for epoch in range(epoch_old + 1, epoch_old + FLAGS.epoch + 1):
         model, optimizer, criterion = train(FLAGS.epoch + epoch_old, epoch, FLAGS.batch_size, train_loader, psmnet, optimizer, criterion, writer, FLAGS.is_cuda)
         File.save_model(epoch, psmnet, optimizer, FLAGS.save_path)
+        if (epoch % 10 == 0):
+            model, criterion = test(FLAGS.batch_size, val_loader, psmnet, criterion, FLAGS.is_cuda)
     # test
     model, criterion = test(FLAGS.batch_size, val_loader, psmnet, criterion, FLAGS.is_cuda)
     # save

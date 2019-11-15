@@ -29,8 +29,8 @@ from dataloader.AsterLoader import AsterLoader
 from misc.dependences.File_util import File_util
 
 
-flags.DEFINE_integer('epoch', 300, 'epoch number')
-flags.DEFINE_integer('batch_size', 4, 'batch size')
+# flags.DEFINE_integer('epoch', 300, 'epoch number')
+flags.DEFINE_integer('batch_size', 1, 'batch size')
 flags.DEFINE_float('lr', 0.001, 'learning rate')
 flags.DEFINE_bool('is_cuda', False, 'whether cuda is used or not')
 flags.DEFINE_bool('pre_trained', False, 'whether model is pretrained or not')
@@ -89,75 +89,19 @@ def main(_argv):
     else:
         epoch_old = 0
         logging.info('NOT load checkpoint')
-
-    # train
-    for epoch in range(epoch_old + 1, epoch_old + FLAGS.epoch + 1):
-        model, optimizer, criterion = train(FLAGS.epoch + epoch_old, epoch, FLAGS.batch_size, train_loader, psmnet, optimizer, criterion, writer, FLAGS.is_cuda)
-        File.save_model(epoch, psmnet, optimizer, FLAGS.save_path)
     # test
-    model, criterion = test(FLAGS.batch_size, val_loader, psmnet, criterion, FLAGS.is_cuda)
-    # save
-    File.save_model(epoch, psmnet, optimizer, FLAGS.save_path)
+    model, criterion = detect(FLAGS.batch_size, val_loader, psmnet, criterion, FLAGS.is_cuda)
 
 
-def train(max_epoch, epoch, batch, loader, model, optimizer, criterion, writer, is_cuda):
-    '''
-    training function
-    '''
-    model.train()
-
-    epoch_losses = []
-    epoch_str = str(epoch) + '/' + str(max_epoch)
-
-    with tqdm(total=len(loader) * batch) as pbar:
-        for i, data in enumerate(loader):
-            if i == 0:
-                pbar.set_postfix(OrderedDict(epoch=epoch_str, loss=0.0))
-            else:
-                pbar.set_postfix(OrderedDict(epoch=epoch_str, loss=np.mean(epoch_losses)))
-            # train
-            optimizer.zero_grad()
-
-            left_img = data['left']
-            right_img = data['right']
-            target_disp = data['disp'][:, 0, :, :]
-
-            mask = (target_disp > 0)
-            mask = mask.detach_()
-
-            if is_cuda:
-                left_img = left_img.to('cuda')
-                right_img = right_img.to('cuda')
-                target_disp = target_disp.to('cuda')
-
-            disp1, disp2, disp3 = model(left_img, right_img)
-            loss1 = criterion(disp1[mask], target_disp[mask])
-            loss2 = criterion(disp2[mask], target_disp[mask])
-            loss3 = criterion(disp3[mask], target_disp[mask])
-            total_loss = 0.5 * loss1 + 0.7 * loss2 + 1.0 * loss3
-
-            if is_cuda:
-                epoch_losses.append(total_loss.to('cpu').data)
-            else:
-                epoch_losses.append(total_loss.data)
-            total_loss.backward()
-            optimizer.step()
-
-            # プログレスバーを進める
-            pbar.update(batch)
-
-    writer.add_scalar("loss", np.mean(epoch_losses), epoch)
-
-    return model, optimizer, criterion
-
-
-def test(batch, loader, model, criterion, is_cuda):
+def detect(batch, loader, model, criterion, is_cuda):
     '''
     test function
     '''
     model.eval()
 
     epoch_losses = []
+    output_list = []
+    GT_list = []
 
     with tqdm(total=len(loader) * batch) as pbar:
         for i, data in enumerate(loader):
@@ -183,6 +127,10 @@ def test(batch, loader, model, criterion, is_cuda):
             loss2 = criterion(disp2[mask], target_disp[mask])
             loss3 = criterion(disp3[mask], target_disp[mask])
             total_loss = 0.5 * loss1 + 0.7 * loss2 + 1.0 * loss3
+
+            # add to list
+            output_list.append(disp3)
+            GT_list.append(target_disp)
 
             if is_cuda:
                 epoch_losses.append(total_loss.to('cpu').data)
