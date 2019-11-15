@@ -28,6 +28,7 @@ class PSMNet(nn.Module):
         # print(left_cost[0, 0, :3, :3])
 
         B, C, H, W = left_cost.size()
+        print(B, C, H, W)
 
         cost_volume = torch.zeros(B, C * 2, self.D // 4, H, W).type_as(left_cost)  # [B, 64, D, 1/4H, 1/4W]
 
