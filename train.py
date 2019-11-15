@@ -125,7 +125,7 @@ def train(max_epoch, epoch, batch, loader, model, optimizer, criterion, writer, 
 
             left_img = data['left']
             right_img = data['right']
-            target_disp = data['disp']
+            target_disp = data['disp'][:, None]
 
             mask = (target_disp > 0)
             mask = mask.detach_()
@@ -172,7 +172,7 @@ def test(batch, loader, model, optimizer, criterion, is_cuda):
 
             left_img = data['left']
             right_img = data['right']
-            target_disp = data['disp']
+            target_disp = data['disp'][:, None]
 
             mask = (target_disp > 0)
             mask = mask.detach_()
