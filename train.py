@@ -13,10 +13,10 @@ import sys
 
 from tqdm import tqdm  # epoch内でプログレスバーを表示(keras的に)
 import numpy as np
-import yaml
+# import yaml
 from collections import OrderedDict
 
-import torch
+# import torch
 import torch.nn as nn
 import torch.optim as optim
 from tensorboardX import SummaryWriter
@@ -36,7 +36,7 @@ flags.DEFINE_bool('is_cuda', False, 'whether cuda is used or not')
 flags.DEFINE_bool('pre_trained', False, 'whether model is pretrained or not')
 flags.DEFINE_string('optimizer', 'Adam', 'select optimizer')
 flags.DEFINE_string('criterion', 'SmoothL1Loss', 'select criterion')
-flags.DEFINE_float('validation_rate', 'validation number rate when spliting dataset')
+flags.DEFINE_float('validation_rate', 0.1, 'validation number rate when spliting dataset')
 flags.DEFINE_string('tensor_board_log_dir', './tensorboard_log', 'tensorboardX logging folder')
 flags.DEFINE_string('config_path', './configs/configs.yml', 'config file path')
 flags.DEFINE_string('csv_path', './dataset/edit/result.csv', 'csv path for dataloader')
@@ -81,7 +81,7 @@ def main(_argv):
     File = File_util()
 
     # set dataloader
-    train_loader, val_loader = AsterLoader(FLAGS.csv_path)
+    train_loader, val_loader = AsterLoader(FLAGS.csv_path, val_rate=FLAGS.validation_rate)
 
     # load checkpoint
     if FLAGS.pre_trained:
