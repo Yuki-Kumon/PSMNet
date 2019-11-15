@@ -139,7 +139,7 @@ def detect(batch, loader, model, criterion, is_cuda, loop_max=-1):
             # add to list
             if is_cuda:
                 left_img = left_img.to('cpu')
-                right_img = right_img.to('cpu')
+                disp3 = disp3.to('cpu')
                 target_disp = target_disp.to('cpu')
             output_list.append(disp3.numpy()[0])
             GT_list.append(target_disp.numpy()[0])
