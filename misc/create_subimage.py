@@ -71,9 +71,9 @@ depth_img = np.load(os.path.join(original_root, 'img_dis.npy'))[0, 9:-9, 9:-9]
 
 band3s_list = trimer(band3s_img, os.path.join(edit_root, 'band3s'), 'band3s.tif')
 print(band3s_list)
-band3bs_list = trimer(band3bs_img, os.path.join(original_root, 'band3bs'), 'band3bs.tif')
+band3bs_list = trimer(band3bs_img, os.path.join(edit_root, 'band3bs'), 'band3bs.tif')
 print(band3bs_list)
-depth_list = trimer(depth_img, os.path.join(original_root, 'depth'), 'depth.png', ext='.png')
+depth_list = trimer(depth_img, os.path.join(edit_root, 'depth'), 'depth.png', ext='.png')
 print(depth_list)
 
 # write csv
