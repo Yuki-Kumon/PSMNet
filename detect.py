@@ -16,7 +16,7 @@ import numpy as np
 # import yaml
 from collections import OrderedDict
 
-# import torch
+import torch
 import torch.nn as nn
 import torch.optim as optim
 # from tensorboardX import SummaryWriter
@@ -73,7 +73,8 @@ def main(_argv):
         # psmnet = psmnet.to('cuda')
         criterion = criterion.to('cuda')
         logging.info('use cuda')
-        psmnet = nn.DataParallel(psmnet)
+        device_ids = range(torch.cuda.device_vount())
+        psmnet = nn.DataParallel(psmnet, device_ids=device_ids)
     else:
         logging.info('NOT use cuda')
 
