@@ -133,6 +133,7 @@ def train(max_epoch, epoch, batch, loader, model, optimizer, criterion, writer, 
             if is_cuda:
                 left_img = left_img.to('cuda')
                 right_img = right_img.to('cuda')
+                target_disp = target_disp.to('cuda')
 
             disp1, disp2, disp3 = model(left_img, right_img)
             loss1 = criterion(disp1[mask], target_disp[mask])
@@ -182,6 +183,7 @@ def test(batch, loader, model, optimizer, criterion, is_cuda):
             if is_cuda:
                 left_img = left_img.to('cuda')
                 right_img = right_img.to('cuda')
+                target_disp = target_disp.to('cuda')
 
             disp1, disp2, disp3 = model(left_img, right_img)
             loss1 = criterion(disp1[mask], target_disp[mask])
