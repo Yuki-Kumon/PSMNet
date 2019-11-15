@@ -19,7 +19,7 @@ from collections import OrderedDict
 # import torch
 import torch.nn as nn
 import torch.optim as optim
-from tensorboardX import SummaryWriter
+# from tensorboardX import SummaryWriter
 
 from absl import app, flags, logging
 from absl.flags import FLAGS
@@ -27,6 +27,7 @@ from absl.flags import FLAGS
 from models.PSMnet import PSMNet
 from dataloader.AsterLoader import AsterLoader
 from misc.dependences.File_util import File_util
+from misc.visualize_util import visualize_util
 
 
 # flags.DEFINE_integer('epoch', 300, 'epoch number')
@@ -41,7 +42,9 @@ flags.DEFINE_float('validation_rate', 0.1, 'validation number rate when spliting
 flags.DEFINE_string('config_path', './configs/configs.yml', 'config file path')
 flags.DEFINE_string('csv_path', './dataset/edit/result.csv', 'csv path for dataloader')
 flags.DEFINE_string('save_path', './model.tar', 'model save path')
+flags.DEFINE_string('output_root', './output', 'path to save image')
 flags.DEFINE_integer('maxdisp', 192, 'max disparity')
+flags.DEFINE_integer('loop_max', -1, 'limitation of detection loop')
 
 
 def main(_argv):
@@ -90,16 +93,21 @@ def main(_argv):
         epoch_old = 0
         logging.info('NOT load checkpoint')
     # test
-    model, criterion = detect(FLAGS.batch_size, val_loader, psmnet, criterion, FLAGS.is_cuda)
+    image_list, preds_list, annot_list = detect(FLAGS.batch_size, val_loader, psmnet, criterion, FLAGS.is_cuda, FLAGS.loop_max)
+    # visualize
+    File_util.create_folder(FLAGS.output_root)
+    vis = visualize_util()
+    vis.visualize(image_list, annot_list, preds_list, root=FLAGS.output_root)
 
 
-def detect(batch, loader, model, criterion, is_cuda):
+def detect(batch, loader, model, criterion, is_cuda, loop_max=-1):
     '''
     test function
     '''
     model.eval()
 
     epoch_losses = []
+    image_list = []
     output_list = []
     GT_list = []
 
@@ -129,8 +137,13 @@ def detect(batch, loader, model, criterion, is_cuda):
             total_loss = 0.5 * loss1 + 0.7 * loss2 + 1.0 * loss3
 
             # add to list
-            output_list.append(disp3)
-            GT_list.append(target_disp)
+            if is_cuda:
+                left_img = left_img.to('cpu')
+                right_img = right_img.to('cpu')
+                target_disp = target_disp.to('cpu')
+            output_list.append(disp3.numpy()[0])
+            GT_list.append(target_disp.numpy()[0])
+            image_list.append(left_img.numpy()[0])
 
             if is_cuda:
                 epoch_losses.append(total_loss.to('cpu').data)
@@ -140,7 +153,13 @@ def detect(batch, loader, model, criterion, is_cuda):
             # プログレスバーを進める
             pbar.update(batch)
 
-    return model, criterion
+            # loop数上限
+            if loop_max > 0 and i + 1 == loop_max:
+                break
+    logging.info('summary:')
+    logging.info('loss: {}'.format(np.mean(epoch_losses)))
+
+    return image_list, output_list, GT_list
 
 
 if __name__ == '__main__':
