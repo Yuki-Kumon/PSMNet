@@ -29,7 +29,7 @@ from dataloader.AsterLoader import AsterLoader
 from misc.dependences.File_util import File_util
 
 
-flags.DEFINE_integer('epoch', 50, 'epoch number')
+flags.DEFINE_integer('epoch', 300, 'epoch number')
 flags.DEFINE_integer('batch_size', 4, 'batch size')
 flags.DEFINE_float('lr', 0.001, 'learning rate')
 flags.DEFINE_bool('is_cuda', False, 'whether cuda is used or not')
