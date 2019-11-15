@@ -72,11 +72,9 @@ def main(_argv):
 
     # convert for cuda
     if FLAGS.is_cuda:
-        # psmnet = psmnet.to('cuda')
+        psmnet = psmnet.to('cuda')
         criterion = criterion.to('cuda')
         logging.info('use cuda')
-        device_ids = range(torch.cuda.device_count())
-        psmnet = nn.DataParallel(psmnet, device_ids=device_ids)
     else:
         logging.info('NOT use cuda')
 
