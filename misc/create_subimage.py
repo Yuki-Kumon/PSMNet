@@ -57,14 +57,22 @@ def trim(img, target_root, img_name, ext='.tif'):
             name_list.append(os.path.splitext(os.path.split(img_name)[1])[0] + '_' + str(i) + '_' + str(j))
 
     # save
+    save_name_list = []
     for i in range(len(img_sub)):
         cv2.imwrite(os.path.join(target_root, name_list[i] + ext), img_sub[i])
+        save_name_list.append(os.path.join(target_root, name_list[i] + ext))
+    return save_name_list
 
 
 # execute
-band3s_img = cv2.imread(os.path.join(original_root, 'band3s.tif'), cv2.IMREAD_GRAYSCALE)
-band3bs_img = cv2.imread(os.path.join(original_root, 'band3bs.tif'), cv2.IMREAD_GRAYSCALE)
-depth_img = np.load(os.path.join(original_root, 'img_dis_opted.npy'))
-trim(band3s_img, os.path.join(edit_root, 'band3s'), 'band3s.tif')
-trim(band3bs_img, os.path.join(original_root, 'band3bs'), 'band3bs.tif')
-trim(depth_img, os.path.join(original_root, 'depth'), 'depth.png', ext='png')
+band3s_img = cv2.imread(os.path.join(original_root, 'band3s.tif'), cv2.IMREAD_GRAYSCALE)[9:-9, 9:-9]
+band3bs_img = cv2.imread(os.path.join(original_root, 'band3bs.tif'), cv2.IMREAD_GRAYSCALE)[9:-9, 9:-9]
+depth_img = np.load(os.path.join(original_root, 'img_dis.npy'))[9:-9, 9:-9]
+print(band3s_img.shape)
+"""
+band3s_list = trim(band3s_img, os.path.join(edit_root, 'band3s'), 'band3s.tif')
+band3bs_list = trim(band3bs_img, os.path.join(original_root, 'band3bs'), 'band3bs.tif')
+depth_list = trim(depth_img, os.path.join(original_root, 'depth'), 'depth.png', ext='png')
+"""
+
+# write csv
