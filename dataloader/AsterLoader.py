@@ -12,7 +12,7 @@ Last Update :
 from torch.utils.data import Dataset
 from torchvision import transforms
 import torch.utils.data  # データセット読み込み関連
-import torch.utils.data.random_split  # データセット分割
+import torch  # データセット分割
 
 from PIL import Image
 import numpy as np
