@@ -79,10 +79,11 @@ def main(_argv):
     File = File_util()
 
     # set dataloader
-    train_loader, val_loader = AsterLoader(
+    val_loader = AsterLoader(
         FLAGS.csv_path,
         val_rate=FLAGS.validation_rate,
-        image_size=[256, 256]
+        image_size=[256, 256],
+        split=False
     )
 
     # load checkpoint
