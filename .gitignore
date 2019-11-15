@@ -8,3 +8,8 @@ log/
 test.py
 
 result/
+
+
+
+# my own ignores
+dataset

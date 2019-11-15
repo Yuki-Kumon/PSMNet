@@ -1,0 +1,8 @@
+size:
+  original: [1200, 1000]
+  trim: [256, 256]
+  stride: [64, 64]
+
+path:
+  original: './dataset/'
+  target: './dataset/edit'
