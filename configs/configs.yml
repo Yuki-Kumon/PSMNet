@@ -5,4 +5,4 @@ size:
 
 path:
   original: './dataset/'
-  target: './dataset/edit'
+  edit: './dataset/edit'

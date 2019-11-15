@@ -11,12 +11,13 @@ Last Update :
 import sys
 sys.path.append('.')
 
-from misc.dependencies.image_trim_tool import ImageTrimTool
 from misc.dependencies.attr_dict import AttributeDict
 from misc.dependencies.File_util import File_util
 
 import yaml
 import os
+import numpy as np
+import cv2
 
 
 with open('./configs/configs.yml', 'r') as f:
@@ -25,32 +26,45 @@ with open('./configs/configs.yml', 'r') as f:
 # set path
 original_root = config.fields()['path']['original']
 edit_root = config.fields()['path']['edit']
-# test_annot_root = config.fields()['path']['test_annot']
-# csv_path = config.fields()['path']['csv']
-# annot = config.fields()['annotation']
 
 # make folders
 util = File_util()
-slik_path = util.create_folders_with_annot(edit_root, ['slik'])
-val_path = util.create_folders_with_annot(edit_root, ['validation'])
-# test_path = util.create_folders_with_annot(edit_root, annot)
-# test_annot_path = util.create_folders_with_annot(test_annot_root, annot)
-
-# copy test image using annotation
-# util.copy_files_by_csv(util.return_path(original_root, 'test'), csv_path, test_annot_root, annot)
+util.create_folder(os.path.join(original_root, 'band3s'))
+util.create_folder(os.path.join(original_root, 'band3bs'))
+util.create_folder(os.path.join(original_root, 'depth'))
 
 # load image size
 original_size = config.fields()['size']['original']
 trimed_size = config.fields()['size']['trim']
-stride_slick = config.fields()['size']['stride_slick']
-stride_validation = config.fields()['size']['stride_validation']
-tp_ratio = config.fields()['size']['tp_ratio']
+stride = config.fields()['size']['stride']
+
+stride = [int(x) for x in stride]
+len = [int(np.floor((original_size[i] - trimed_size[i]) / stride[i])) for i in range(2)]
+
 
 # trim and save
-Im = ImageTrimTool(original_size, trimed_size, stride=[int(x) for x in stride_slick], tp_ratio=tp_ratio)
-Im(os.path.join(original_root, 'training'), slik_path[0])
-print('slick finished')
-# Im = ImageTrimTool(original_size, trimed_size, stride=[int(trimed_size[i] / 2) for i in range(2)])
-Im = ImageTrimTool(original_size, trimed_size, stride=[int(x) for x in stride_validation])
-Im(os.path.join(original_root, 'validation'), val_path[0], threshold=False)
-print('validation finished')
+def trim(img, target_root, img_name, ext='.tif'):
+    # load original images and annotations
+    img_sub = []
+    name_list = []
+
+    for j in range(len[1]):
+        for i in range(len[0]):
+            img_sub.append(img[
+                stride[0] * i:stride[0] * i + trimed_size[0],
+                stride[1] * j:stride[1] * j + trimed_size[1]
+            ])
+            name_list.append(os.path.splitext(os.path.split(img_name)[1])[0] + '_' + str(i) + '_' + str(j))
+
+    # save
+    for i in range(len(img_sub)):
+        cv2.imwrite(os.path.join(target_root, name_list[i] + ext), img_sub[i])
+
+
+# execute
+band3s_img = cv2.imread(os.path.join(original_root, 'band3s.tif'), cv2.IMREAD_GRAYSCALE)
+band3bs_img = cv2.imread(os.path.join(original_root, 'band3bs.tif'), cv2.IMREAD_GRAYSCALE)
+depth_img = np.load(os.path.join(original_root, 'img_dis_opted.npy'))
+trim(band3s_img, os.path.join(edit_root, 'band3s'), 'band3s.tif')
+trim(band3bs_img, os.path.join(original_root, 'band3bs'), 'band3bs.tif')
+trim(depth_img, os.path.join(original_root, 'depth'), 'depth.png', ext='png')
