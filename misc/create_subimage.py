@@ -11,8 +11,8 @@ Last Update :
 import sys
 sys.path.append('.')
 
-from misc.dependencies.attr_dict import AttributeDict
-from misc.dependencies.File_util import File_util
+from misc.dependences.attr_dict import AttributeDict
+from misc.dependences.File_util import File_util
 
 import yaml
 import os
