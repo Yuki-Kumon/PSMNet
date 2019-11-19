@@ -15,6 +15,7 @@ import torch.utils.data  # データセット読み込み関連
 import torch  # データセット分割
 
 from PIL import Image
+import cv2
 import numpy as np
 
 import random
@@ -27,10 +28,11 @@ class AsterDataset(Dataset):
     Datasetクラスを継承
     '''
 
-    def __init__(self, csv_path, trans1=None, trans2=None, trans3=None):
+    def __init__(self, csv_path, trans1=None, trans2=None, trans3=None, detect=False):
         self.trans1 = trans1
         self.trans2 = trans2
         self.trans3 = trans3
+        self.detect = detect
         # read csv
         with open(csv_path) as f:
             reader = csv.reader(f)
@@ -63,7 +65,10 @@ class AsterDataset(Dataset):
 
         del im_list
 
-        return data
+        if self.detect:
+            return data, cv2.imread(self.path_list[idx][0], cv2.IMREAD_GRAYSCALE)
+        else:
+            return data
 
 
 class Flip_Segmentation(object):

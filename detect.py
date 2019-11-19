@@ -84,7 +84,8 @@ def main(_argv):
         val_rate=FLAGS.validation_rate,
         image_size=[256, 256],
         split=False,
-        batch_size=FLAGS.batch_size
+        batch_size=FLAGS.batch_size,
+        detect=True
     )
 
     # load checkpoint
@@ -114,7 +115,7 @@ def detect(batch, loader, model, criterion, is_cuda, loop_max=-1):
     GT_list = []
 
     with tqdm(total=len(loader) * batch) as pbar:
-        for i, data in enumerate(loader):
+        for i, data, original in enumerate(loader):
             if i == 0:
                 pbar.set_postfix(OrderedDict(epoch='validation', loss=0.0))
             else:
@@ -145,7 +146,7 @@ def detect(batch, loader, model, criterion, is_cuda, loop_max=-1):
                 target_disp = target_disp.to('cpu')
             output_list.append(disp3.detach().numpy()[0])
             GT_list.append(target_disp.numpy()[0])
-            image_list.append(left_img.numpy()[0, 0])
+            image_list.append(original[0])
 
             if is_cuda:
                 epoch_losses.append(total_loss.to('cpu').data)
