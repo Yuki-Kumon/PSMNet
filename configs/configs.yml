@@ -1,5 +1,5 @@
 size:
-  original: [1200, 1000]
+  original: [1000, 1200]
   trim: [256, 256]
   stride: [64, 64]
 

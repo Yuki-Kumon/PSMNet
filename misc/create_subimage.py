@@ -41,7 +41,7 @@ trimed_size = config.fields()['size']['trim']
 stride = config.fields()['size']['stride']
 
 stride = [int(x) for x in stride]
-length = [int(np.floor((original_size[i] - trimed_size[i]) / stride[i]) - 1) for i in range(2)]
+length = [int(np.floor((original_size[i] - trimed_size[i]) / stride[i])) for i in range(2)]
 
 
 # trim and save
