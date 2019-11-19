@@ -146,7 +146,7 @@ def detect(batch, loader, model, criterion, is_cuda, loop_max=-1):
                 target_disp = target_disp.to('cpu')
             output_list.append(disp3.detach().numpy()[0])
             GT_list.append(target_disp.numpy()[0])
-            image_list.append(data['original'][0])
+            image_list.append(data['original'].numpy()[0])
 
             if is_cuda:
                 epoch_losses.append(total_loss.to('cpu').data)
