@@ -63,12 +63,12 @@ class AsterDataset(Dataset):
         data['right'] = im_list[1]
         data['disp'] = im_list[2]
 
+        if self.detect:
+            data['original'] = cv2.imread(self.path_list[idx][0], cv2.IMREAD_GRAYSCALE)
+
         del im_list
 
-        if self.detect:
-            return data, cv2.imread(self.path_list[idx][0], cv2.IMREAD_GRAYSCALE)
-        else:
-            return data
+        return data
 
 
 class Flip_Segmentation(object):
