@@ -170,9 +170,9 @@ def set_trans(image_size):
     return trans1, trans2, trans3
 
 
-def AsterLoader(csv_path, image_size=[256, 256], batch_size=4, split=True, val_rate=0.1, shuffle=True):
+def AsterLoader(csv_path, image_size=[256, 256], batch_size=4, split=True, val_rate=0.1, shuffle=True, detect=False):
     trans1, trans2, trans3 = set_trans(image_size)
-    dataset = AsterDataset(csv_path, trans1, trans2, trans3)
+    dataset = AsterDataset(csv_path, trans1, trans2, trans3, detect)
     if split:
         # split dataset randomly
         n_sample = len(dataset)
