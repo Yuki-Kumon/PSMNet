@@ -30,6 +30,7 @@ class visualize_util():
     def __init__(self):
         pass
 
+    @classmethod
     def visualize(self, image_list, annot_list, preds_list, root=None, transform=True):
         '''
         3枚の画像をまとめてプロット
@@ -38,7 +39,9 @@ class visualize_util():
         if transform:
             image_list = self.image_trans(image_list)
             # annot_list = self.annot_trans(annot_list)
+            annot_list = self.image_trans(annot_list)
             # preds_list = self.annot_trans(preds_list)
+            preds_list = self.image_trans(preds_list)
 
         # 書き出し
         for i in range(len(image_list)):

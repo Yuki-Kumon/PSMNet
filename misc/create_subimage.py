@@ -69,8 +69,8 @@ def trimer(img, target_root, img_name, ext='.tif'):
 # execute
 band3s_img = cv2.imread(os.path.join(original_root, 'band3s.tif'), cv2.IMREAD_GRAYSCALE)[9:-9, 9:-9]
 band3bs_img = cv2.imread(os.path.join(original_root, 'band3bs.tif'), cv2.IMREAD_GRAYSCALE)[9:-9, 9:-9]
-# depth_img = np.load(os.path.join(original_root, 'res.npy'))[9:-9, 9:-9]
-depth_img = cv2.imread(os.path.join(original_root, 'res.png'), cv2.IMREAD_GRAYSCALE)[9:-9, 9:-9]
+depth_img = np.load(os.path.join(original_root, 'res.npy'))[9:-9, 9:-9]
+# depth_img = cv2.imread(os.path.join(original_root, 'res.png'), cv2.IMREAD_GRAYSCALE)[9:-9, 9:-9]
 
 band3s_list = trimer(band3s_img, os.path.join(edit_root, 'band3s'), 'band3s.tif')
 band3bs_list = trimer(band3bs_img, os.path.join(edit_root, 'band3bs'), 'band3bs.tif')
