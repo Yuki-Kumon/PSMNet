@@ -15,7 +15,6 @@ import torch.utils.data  # データセット読み込み関連
 import torch  # データセット分割
 
 from PIL import Image
-import cv2
 import numpy as np
 
 import random
@@ -50,6 +49,9 @@ class AsterDataset(Dataset):
         im_list.append(Image.open(self.path_list[idx][1]))
         im_list.append(Image.open(self.path_list[idx][2]))
 
+        if self.detect:
+            data['original'] = np.asarray(im_list[0])
+
         # transform
         if self.trans1:
             im_list[0] = self.trans1(im_list[0])
@@ -62,9 +64,6 @@ class AsterDataset(Dataset):
         data['left'] = im_list[0]
         data['right'] = im_list[1]
         data['disp'] = im_list[2]
-
-        if self.detect:
-            data['original'] = cv2.imread(self.path_list[idx][0], cv2.IMREAD_GRAYSCALE)
 
         del im_list
 
